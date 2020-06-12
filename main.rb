@@ -2,5 +2,17 @@
 
 require 'octokit'
 
-c = Octokit::Client.new(:access_token => ENV['GITHUB_TOKEN'], :auto_paginate => true)
-c.update_repository(ENV['GITHUB_REPOSITORY'], {:default_branch => 'main'} )
+GITHUB_TOKEN=ENV['GITHUB_TOKEN']
+GITHUB_REPOSITORY=ENV['GITHUB_REPOSITORY']
+
+c = Octokit::Client.new(:access_token => GITHUB_TOKEN, :auto_paginate => true)
+
+if c.user()
+    puts "Hello %s" % c.user().login
+end
+
+if c.repository?(GITHUB_REPOSITORY)
+    c.update_repository(GITHUB_REPOSITORY, {:default_branch => 'main'} )
+else
+    puts "No such repository: %s" % GITHUB_REPOSITORY
+end
